@@ -11,356 +11,211 @@
 
 // export default HomeScreen
 
-import { View, Text, ScrollView, TouchableOpacity, FlatList, Animated, Easing } from 'react-native'
-import React, { useEffect, useState, useRef } from 'react'
-import { useRouter } from 'expo-router'
-import { Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons'
-import { useAuth } from '@/context/AuthContext'
-import { LinearGradient } from 'expo-linear-gradient'
-import { BlurView } from 'expo-blur'
+import { View, Text, TouchableOpacity, ScrollView, StatusBar } from 'react-native'
+import React from 'react'
 
 const HomeScreen = () => {
-  const router = useRouter()
-  const { user } = useAuth()
-  
-  // Animation values
-  const fadeAnim = useRef(new Animated.Value(0)).current
-  const slideAnim = useRef(new Animated.Value(50)).current
-  const scaleAnim = useRef(new Animated.Value(0.9)).current
-  
-  // Mock data for demonstration
-  const [entries, setEntries] = useState([
-    {
-      id: '1',
-      fuelType: 'petrol',
-      date: '2023-10-15',
-      quantity: '42.5',
-      pricePerUnit: '1.65',
-      totalCost: '70.13',
-      odometer: '15420'
-    },
-    {
-      id: '2',
-      fuelType: 'diesel',
-      date: '2023-10-08',
-      quantity: '38.0',
-      pricePerUnit: '1.72',
-      totalCost: '65.36',
-      odometer: '15080'
-    }
-  ])
-  
-  const [stats, setStats] = useState({
-    totalFuel: 80.5,
-    totalCost: 135.49,
-    avgEfficiency: 12.5,
-    lastEntryDate: 'Oct 15, 2023'
-  })
-
-  useEffect(() => {
-    // Animate on component mount
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 600,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 700,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: true,
-      })
-    ]).start()
-  }, [])
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount)
-  }
-
-  const renderEntryItem = ({ item }: { item: any }) => (
-    <Animated.View 
-      className="bg-white/80 p-4 rounded-2xl mb-3 shadow-sm backdrop-blur-md"
-      style={{
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 3.84,
-        elevation: 5,
-      }}
-    >
-      <View className="flex-row justify-between items-center mb-2">
-        <Text className="text-lg font-semibold text-gray-800">{item.date}</Text>
-        <View className={`px-3 py-1 rounded-full ${
-          item.fuelType === 'petrol' ? 'bg-blue-100/80' : 'bg-amber-100/80'
-        }`}>
-          <Text className={`text-xs font-medium ${
-            item.fuelType === 'petrol' ? 'text-blue-800' : 'text-amber-800'
-          }`}>
-            {item.fuelType.toUpperCase()}
-          </Text>
-        </View>
-      </View>
-      
-      <View className="flex-row justify-between mb-2">
-        <View>
-          <Text className="text-gray-600 text-sm">Quantity</Text>
-          <Text className="font-medium">{item.quantity} L</Text>
-        </View>
-        <View>
-          <Text className="text-gray-600 text-sm">Price/L</Text>
-          <Text className="font-medium">${item.pricePerUnit}</Text>
-        </View>
-        <View>
-          <Text className="text-gray-600 text-sm">Total</Text>
-          <Text className="font-medium text-green-600">{formatCurrency(parseFloat(item.totalCost))}</Text>
-        </View>
-      </View>
-
-      {item.odometer && (
-        <View className="mb-2">
-          <Text className="text-gray-600 text-sm">Odometer</Text>
-          <Text className="font-medium">{item.odometer} km</Text>
-        </View>
-      )}
-    </Animated.View>
-  )
-
   return (
-    <LinearGradient 
-      colors={['#f8fafc', '#e2e8f0', '#cbd5e1']} 
-      className="flex-1"
-    >
-      <ScrollView className="p-5" showsVerticalScrollIndicator={false}>
-        {/* Header with animated entrance */}
-        <Animated.View 
-          className="mb-8"
-          style={{
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }]
-          }}
-        >
-          <Text className="text-4xl font-bold text-gray-900 mb-2">FuelWise</Text>
-          <Text className="text-gray-600 text-lg">Track your fuel usage & expenses</Text>
-        </Animated.View>
-
-        {/* Quick Stats with glassmorphism effect */}
-        <Animated.View 
-          className="mb-8"
-          style={{
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }, { scale: scaleAnim }]
-          }}
-        >
-          <BlurView intensity={80} tint="light" className="rounded-3xl overflow-hidden">
-            <LinearGradient 
-              colors={['rgba(255,255,255,0.8)', 'rgba(255,255,255,0.4)']} 
-              className="p-6 rounded-3xl"
-            >
-              <Text className="text-xl font-semibold mb-5 text-gray-800 text-center">Quick Overview</Text>
-              
-              <View className="flex-row justify-between mb-5">
-                <View className="items-center flex-1">
-                  <View className="bg-blue-500/10 p-3 rounded-full mb-2">
-                    <Ionicons name="water" size={24} color="#3b82f6" />
-                  </View>
-                  <Text className="text-2xl font-bold text-gray-900 mb-1">{stats.totalFuel.toFixed(1)}L</Text>
-                  <Text className="text-gray-600 text-xs">Total Fuel</Text>
-                </View>
-                
-                <View className="items-center flex-1">
-                  <View className="bg-green-500/10 p-3 rounded-full mb-2">
-                    <Ionicons name="cash" size={24} color="#10b981" />
-                  </View>
-                  <Text className="text-2xl font-bold text-gray-900 mb-1">{formatCurrency(stats.totalCost)}</Text>
-                  <Text className="text-gray-600 text-xs">Total Spent</Text>
-                </View>
-                
-                <View className="items-center flex-1">
-                  <View className="bg-red-500/10 p-3 rounded-full mb-2">
-                    <Ionicons name="speedometer" size={24} color="#ef4444" />
-                  </View>
-                  <Text className="text-2xl font-bold text-gray-900 mb-1">
-                    {stats.avgEfficiency ? stats.avgEfficiency.toFixed(1) : 'N/A'}
-                  </Text>
-                  <Text className="text-gray-600 text-xs">km/L</Text>
-                </View>
-              </View>
-
-              {stats.lastEntryDate && (
-                <View className="bg-gray-100/50 py-2 px-4 rounded-full self-center">
-                  <Text className="text-gray-600 text-sm">
-                    Last entry: <Text className="font-semibold">{stats.lastEntryDate}</Text>
-                  </Text>
-                </View>
-              )}
-            </LinearGradient>
-          </BlurView>
-        </Animated.View>
-
-        {/* Recent Entries */}
-        <Animated.View 
-          className="mb-8"
-          style={{
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }]
-          }}
-        >
-          <View className="flex-row justify-between items-center mb-5">
-            <Text className="text-xl font-semibold text-gray-800">Recent Entries</Text>
-            {entries.length > 0 && (
-              <TouchableOpacity 
-                onPress={() => router.push('/(dashboard)/profile')}
-                className="flex-row items-center"
-              >
-                <Text className="text-blue-500 font-medium mr-1">View All</Text>
-                <Ionicons name="arrow-forward" size={16} color="#3b82f6" />
-              </TouchableOpacity>
-            )}
-          </View>
-
-          {entries.length === 0 ? (
-            <View className="bg-white/80 rounded-2xl p-8 items-center backdrop-blur-md">
-              <View className="bg-blue-100/50 p-5 rounded-full mb-4">
-                <Ionicons name="car-sport" size={40} color="#3b82f6" />
-              </View>
-              <Text className="text-gray-600 mt-2 text-lg font-medium">No entries yet</Text>
-              <Text className="text-gray-500 text-center mt-1 mb-4">
-                Add your first fuel entry to start tracking
-              </Text>
-              <TouchableOpacity 
-                className="bg-blue-500 px-6 py-3 rounded-full flex-row items-center"
-                onPress={() => router.push('/(dashboard)/setting')}
-              >
-                <Ionicons name="add" size={20} color="#fff" className="mr-2" />
-                <Text className="text-white font-semibold">Add First Entry</Text>
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <FlatList
-              data={entries.slice(0, 3)}
-              renderItem={renderEntryItem}
-              keyExtractor={item => item.id}
-              scrollEnabled={false}
-            />
-          )}
-        </Animated.View>
-
-        {/* Quick Actions with animated buttons */}
-        <Animated.View 
-          style={{
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }]
-          }}
-        >
-          <Text className="text-xl font-semibold mb-5 text-gray-800">Quick Actions</Text>
+    <View className="flex-1 bg-gray-50">
+      <StatusBar barStyle="light-content" backgroundColor="#1e40af" />
+      
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Hero Header with Gradient Effect */}
+        <View className="bg-blue-600 px-6 pt-12 pb-20 relative overflow-hidden">
+          {/* Decorative Circles */}
+          <View className="absolute top-0 right-0 w-40 h-40 bg-blue-500 rounded-full opacity-20 -mr-20 -mt-10" />
+          <View className="absolute top-20 right-10 w-24 h-24 bg-blue-400 rounded-full opacity-15" />
+          <View className="absolute bottom-0 left-0 w-32 h-32 bg-blue-700 rounded-full opacity-25 -ml-16 -mb-8" />
           
-          <View className="flex-row justify-between">
-            <TouchableOpacity 
-              className="flex-1 bg-white/90 p-5 rounded-2xl mr-3 items-center shadow-md"
-              onPress={() => router.push('/(dashboard)/setting')}
-              style={{
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.1,
-                shadowRadius: 3.84,
-                elevation: 5,
-              }}
-            >
-              <View className="bg-blue-500/10 p-3 rounded-full mb-3">
-                <Ionicons name="add-circle" size={28} color="#3b82f6" />
+          {/* Header Content */}
+          <View className="flex-row justify-between items-start mb-8">
+            <View className="flex-1">
+              <Text className="text-blue-100 text-base">Good Morning</Text>
+              <Text className="text-white text-3xl font-bold mt-1">FuelWise</Text>
+              <Text className="text-blue-100 text-sm mt-1">Smart fuel tracking made simple</Text>
+            </View>
+            <View className="bg-white/10 rounded-full px-4 py-2">
+              <Text className="text-white text-sm font-medium">🗓️ Today</Text>
+            </View>
+          </View>
+
+          {/* Main CTA Button */}
+          <TouchableOpacity className="bg-white rounded-2xl px-6 py-5 shadow-xl">
+            <View className="flex-row items-center justify-center">
+              <View className="w-12 h-12 bg-blue-100 rounded-full items-center justify-center mr-4">
+                <Text className="text-blue-600 text-2xl">⛽</Text>
               </View>
-              <Text className="text-blue-600 font-medium">Add Entry</Text>
+              <View>
+                <Text className="text-gray-800 text-xl font-bold">Add Fuel Entry</Text>
+                <Text className="text-gray-500 text-sm">Track your fuel usage</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* Stats Cards - Overlapping Header */}
+        <View className="px-4 -mt-16 mb-8">
+          <View className="flex-row space-x-3 mb-4">
+            <View className="flex-1 bg-white rounded-2xl p-5 shadow-sm">
+              <View className="flex-row items-center justify-between mb-2">
+                <Text className="text-gray-500 text-xs font-semibold uppercase tracking-wide">Total Fuel</Text>
+                <View className="w-8 h-8 bg-green-100 rounded-lg items-center justify-center">
+                  <Text className="text-green-600 text-sm">🚗</Text>
+                </View>
+              </View>
+              <Text className="text-gray-900 text-2xl font-bold">247.5</Text>
+              <Text className="text-gray-400 text-sm">Liters</Text>
+            </View>
+            
+            <View className="flex-1 bg-white rounded-2xl p-5 shadow-sm">
+              <View className="flex-row items-center justify-between mb-2">
+                <Text className="text-gray-500 text-xs font-semibold uppercase tracking-wide">This Month</Text>
+                <View className="w-8 h-8 bg-blue-100 rounded-lg items-center justify-center">
+                  <Text className="text-blue-600 text-sm">💰</Text>
+                </View>
+              </View>
+              <Text className="text-gray-900 text-2xl font-bold">$124</Text>
+              <Text className="text-gray-400 text-sm">Spent</Text>
+            </View>
+          </View>
+
+          <View className="flex-row space-x-3">
+            <View className="flex-1 bg-white rounded-2xl p-5 shadow-sm">
+              <View className="flex-row items-center justify-between mb-2">
+                <Text className="text-gray-500 text-xs font-semibold uppercase tracking-wide">Efficiency</Text>
+                <View className="w-8 h-8 bg-purple-100 rounded-lg items-center justify-center">
+                  <Text className="text-purple-600 text-sm">⚡</Text>
+                </View>
+              </View>
+              <Text className="text-gray-900 text-2xl font-bold">12.5</Text>
+              <Text className="text-gray-400 text-sm">km/L</Text>
+            </View>
+            
+            <View className="flex-1 bg-white rounded-2xl p-5 shadow-sm">
+              <View className="flex-row items-center justify-between mb-2">
+                <Text className="text-gray-500 text-xs font-semibold uppercase tracking-wide">Last Fill</Text>
+                <View className="w-8 h-8 bg-orange-100 rounded-lg items-center justify-center">
+                  <Text className="text-orange-600 text-sm">📅</Text>
+                </View>
+              </View>
+              <Text className="text-gray-900 text-2xl font-bold">3</Text>
+              <Text className="text-gray-400 text-sm">Days ago</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Quick Actions */}
+        <View className="px-4 mb-8">
+          <Text className="text-gray-800 text-xl font-bold mb-4">Quick Actions</Text>
+          <View className="flex-row space-x-4">
+            <TouchableOpacity className="flex-1 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6">
+              <View className="items-center">
+                <View className="w-14 h-14 bg-white/20 rounded-full items-center justify-center mb-3">
+                  <Text className="text-white text-2xl">📊</Text>
+                </View>
+                <Text className="text-white font-bold text-base">View Reports</Text>
+                <Text className="text-blue-100 text-xs mt-1">Analytics & insights</Text>
+              </View>
             </TouchableOpacity>
             
-            <TouchableOpacity 
-              className="flex-1 bg-white/90 p-5 rounded-2xl mx-3 items-center shadow-md"
-              onPress={() => router.push('/(dashboard)/setting')}
-              style={{
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.1,
-                shadowRadius: 3.84,
-                elevation: 5,
-              }}
-            >
-              <View className="bg-green-500/10 p-3 rounded-full mb-3">
-                <MaterialIcons name="analytics" size={28} color="#10b981" />
+            <TouchableOpacity className="flex-1 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6">
+              <View className="items-center">
+                <View className="w-14 h-14 bg-white/20 rounded-full items-center justify-center mb-3">
+                  <Text className="text-white text-2xl">📋</Text>
+                </View>
+                <Text className="text-white font-bold text-base">All Entries</Text>
+                <Text className="text-green-100 text-xs mt-1">Fuel history</Text>
               </View>
-              <Text className="text-green-600 font-medium">Analytics</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              className="flex-1 bg-white/90 p-5 rounded-2xl ml-3 items-center shadow-md"
-              onPress={() => router.push('/(dashboard)/setting')}
-              style={{
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.1,
-                shadowRadius: 3.84,
-                elevation: 5,
-              }}
-            >
-              <View className="bg-purple-500/10 p-3 rounded-full mb-3">
-                <FontAwesome5 name="history" size={24} color="#8b5cf6" />
-              </View>
-              <Text className="text-purple-600 font-medium">History</Text>
             </TouchableOpacity>
           </View>
-        </Animated.View>
+        </View>
 
-        {/* Bottom spacer */}
-        <View className="h-20" />
+        {/* Recent Activity */}
+        <View className="px-4 mb-8">
+          <View className="flex-row justify-between items-center mb-4">
+            <Text className="text-gray-800 text-xl font-bold">Recent Activity</Text>
+            <TouchableOpacity>
+              <Text className="text-blue-600 font-semibold">See All</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Activity Items */}
+          <View className="space-y-3">
+            <View className="bg-white rounded-2xl p-4 shadow-sm flex-row items-center">
+              <View className="w-12 h-12 bg-blue-100 rounded-full items-center justify-center mr-4">
+                <Text className="text-blue-600 text-lg">⛽</Text>
+              </View>
+              <View className="flex-1">
+                <Text className="text-gray-800 font-semibold">Petrol Fill-up</Text>
+                <Text className="text-gray-500 text-sm">45.5L • $67.80 • Yesterday</Text>
+              </View>
+              <View className="bg-green-100 px-3 py-1 rounded-full">
+                <Text className="text-green-700 text-xs font-semibold">PETROL</Text>
+              </View>
+            </View>
+
+            <View className="bg-white rounded-2xl p-4 shadow-sm flex-row items-center">
+              <View className="w-12 h-12 bg-green-100 rounded-full items-center justify-center mr-4">
+                <Text className="text-green-600 text-lg">⛽</Text>
+              </View>
+              <View className="flex-1">
+                <Text className="text-gray-800 font-semibold">Diesel Fill-up</Text>
+                <Text className="text-gray-500 text-sm">52.2L • $71.20 • 3 days ago</Text>
+              </View>
+              <View className="bg-blue-100 px-3 py-1 rounded-full">
+                <Text className="text-blue-700 text-xs font-semibold">DIESEL</Text>
+              </View>
+            </View>
+
+            <View className="bg-white rounded-2xl p-4 shadow-sm flex-row items-center">
+              <View className="w-12 h-12 bg-purple-100 rounded-full items-center justify-center mr-4">
+                <Text className="text-purple-600 text-lg">📊</Text>
+              </View>
+              <View className="flex-1">
+                <Text className="text-gray-800 font-semibold">Monthly Report</Text>
+                <Text className="text-gray-500 text-sm">Efficiency improved by 8%</Text>
+              </View>
+              <View className="bg-purple-100 px-3 py-1 rounded-full">
+                <Text className="text-purple-700 text-xs font-semibold">REPORT</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {/* Fuel Tips Card */}
+        <View className="px-4 mb-8">
+          <View className="bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl p-6 relative overflow-hidden">
+            {/* Decorative Elements */}
+            <View className="absolute top-0 right-0 w-24 h-24 bg-orange-300 rounded-full opacity-30 -mr-12 -mt-12" />
+            <View className="absolute bottom-0 left-0 w-16 h-16 bg-orange-600 rounded-full opacity-30 -ml-8 -mb-8" />
+            
+            <View className="flex-row items-center mb-3">
+              <View className="w-10 h-10 bg-white/20 rounded-full items-center justify-center mr-3">
+                <Text className="text-white text-lg">💡</Text>
+              </View>
+              <Text className="text-white font-bold text-lg">Fuel Saving Tip</Text>
+            </View>
+            <Text className="text-orange-100 text-base leading-relaxed">
+              Maintain steady speeds and avoid rapid acceleration to improve your fuel efficiency by up to 15%!
+            </Text>
+          </View>
+        </View>
+
+        {/* Bottom Navigation Hint */}
+        <View className="px-4 mb-6">
+          <View className="bg-white rounded-2xl p-4 shadow-sm border-2 border-dashed border-gray-200">
+            <Text className="text-gray-600 text-center font-medium">
+              🚀 Ready to start tracking? Tap "Add Fuel Entry" above!
+            </Text>
+          </View>
+        </View>
+
+        {/* Bottom Spacing */}
+        <View className="h-8" />
       </ScrollView>
-
-      {/* Floating Action Button with pulse animation */}
-      <Animated.View 
-        className="absolute bottom-6 right-6"
-        style={{
-          opacity: fadeAnim,
-          transform: [{ scale: scaleAnim }]
-        }}
-      >
-        <TouchableOpacity
-          className="bg-blue-500 w-16 h-16 rounded-full items-center justify-center shadow-xl"
-          onPress={() => router.push('/(dashboard)/setting')}
-          style={{
-            shadowColor: "#3b82f6",
-            shadowOffset: {
-              width: 0,
-              height: 4,
-            },
-            shadowOpacity: 0.3,
-            shadowRadius: 4.65,
-            elevation: 8,
-          }}
-        >
-          <Ionicons name="add" size={32} color="#fff" />
-        </TouchableOpacity>
-      </Animated.View>
-    </LinearGradient>
+    </View>
   )
 }
 
 export default HomeScreen
+
