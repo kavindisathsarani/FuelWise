@@ -3,6 +3,7 @@ import {
     collection,
     deleteDoc,
     doc,
+    getDoc,
     getDocs,
     orderBy,
     query,
@@ -107,26 +108,63 @@ export class FuelService {
     }
   }
 
+  // Test function to verify document exists and can be read
+  static async testDocumentAccess(entryId: string): Promise<void> {
+    try {
+      console.log('=== TESTING DOCUMENT ACCESS ===');
+      const entryRef = doc(db, FUEL_COLLECTION, entryId);
+      console.log('Testing read access for document:', entryRef.path);
+      
+      const docSnap = await getDoc(entryRef);
+      console.log('Document exists:', docSnap.exists());
+      
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        console.log('Document data:', data);
+        console.log('Document userId:', data.userId);
+      } else {
+        console.log('Document does not exist!');
+      }
+      console.log('=== DOCUMENT ACCESS TEST COMPLETE ===');
+    } catch (error) {
+      console.error('=== DOCUMENT ACCESS TEST FAILED ===');
+      console.error('Error accessing document:', error);
+      throw error;
+    }
+  }
+
   // Delete a fuel entry
   static async deleteFuelEntry(entryId: string): Promise<void> {
     try {
+      console.log('=== DELETE ATTEMPT START ===');
       console.log('Attempting to delete fuel entry with ID:', entryId);
       console.log('Collection name:', FUEL_COLLECTION);
+      console.log('Entry ID type:', typeof entryId);
+      console.log('Entry ID length:', entryId?.length);
       
       if (!entryId || entryId.trim() === '') {
         throw new Error('Invalid entry ID provided');
       }
       
+      // First, test if we can access the document
+      await this.testDocumentAccess(entryId);
+      
       const entryRef = doc(db, FUEL_COLLECTION, entryId);
       console.log('Document reference:', entryRef);
       console.log('Document path:', entryRef.path);
+      console.log('Document ID:', entryRef.id);
       
+      console.log('Calling deleteDoc...');
       await deleteDoc(entryRef);
       console.log('Successfully deleted fuel entry');
+      console.log('=== DELETE ATTEMPT SUCCESS ===');
     } catch (error) {
+      console.error('=== DELETE ATTEMPT FAILED ===');
       console.error('Error deleting fuel entry:', error);
       console.error('Error code:', error.code);
       console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+      console.error('Full error object:', JSON.stringify(error, null, 2));
       throw error;
     }
   }

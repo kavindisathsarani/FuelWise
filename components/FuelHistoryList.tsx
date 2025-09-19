@@ -3,6 +3,7 @@ import {
     Alert,
     FlatList,
     Modal,
+    Platform,
     RefreshControl,
     Text,
     TouchableOpacity,
@@ -63,33 +64,61 @@ export default function FuelHistoryList({ onRefresh }: FuelHistoryListProps) {
 
   const handleDelete = (entry: FuelEntry) => {
     console.log('Delete button pressed for entry:', entry);
-    Alert.alert(
-      'Delete Entry',
-      'Are you sure you want to delete this fuel entry?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              console.log('User confirmed deletion for entry ID:', entry.id);
-              console.log('Entry details:', entry);
-              await FuelService.deleteFuelEntry(entry.id);
-              console.log('Delete successful, reloading entries...');
-              await loadEntries();
-              onRefresh?.();
-              console.log('Entries reloaded after deletion');
-              Alert.alert('Success', 'Fuel entry deleted successfully!');
-            } catch (error) {
-              console.error('Error deleting fuel entry:', error);
-              console.error('Error details:', error);
-              Alert.alert('Error', `Failed to delete fuel entry: ${error.message || 'Unknown error'}`);
-            }
+    console.log('Platform:', Platform.OS);
+    
+    // For web platform, use confirm instead of Alert
+    if (Platform.OS === 'web') {
+      console.log('Using web confirm dialog for delete...');
+      const confirmed = window.confirm('Are you sure you want to delete this fuel entry?');
+      console.log('User confirmed delete:', confirmed);
+      
+      if (confirmed) {
+        console.log('User confirmed deletion for entry ID:', entry.id);
+        console.log('Entry details:', entry);
+        FuelService.deleteFuelEntry(entry.id).then(async () => {
+          console.log('Delete successful, reloading entries...');
+          await loadEntries();
+          onRefresh?.();
+          console.log('Entries reloaded after deletion');
+          alert('Fuel entry deleted successfully!');
+        }).catch((error) => {
+          console.error('Error deleting fuel entry:', error);
+          console.error('Error details:', error);
+          alert(`Failed to delete fuel entry: ${error.message || 'Unknown error'}`);
+        });
+      } else {
+        console.log('User cancelled delete');
+      }
+    } else {
+      // For mobile platforms, use Alert
+      Alert.alert(
+        'Delete Entry',
+        'Are you sure you want to delete this fuel entry?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Delete',
+            style: 'destructive',
+            onPress: async () => {
+              try {
+                console.log('User confirmed deletion for entry ID:', entry.id);
+                console.log('Entry details:', entry);
+                await FuelService.deleteFuelEntry(entry.id);
+                console.log('Delete successful, reloading entries...');
+                await loadEntries();
+                onRefresh?.();
+                console.log('Entries reloaded after deletion');
+                Alert.alert('Success', 'Fuel entry deleted successfully!');
+              } catch (error) {
+                console.error('Error deleting fuel entry:', error);
+                console.error('Error details:', error);
+                Alert.alert('Error', `Failed to delete fuel entry: ${error.message || 'Unknown error'}`);
+              }
+            },
           },
-        },
-      ]
-    );
+        ]
+      );
+    }
   };
 
   const handleEditSuccess = () => {
@@ -193,18 +222,59 @@ export default function FuelHistoryList({ onRefresh }: FuelHistoryListProps) {
               if (entries.length > 0) {
                 const firstEntry = entries[0];
                 console.log('Testing delete with entry:', firstEntry);
+                console.log('Entry ID type:', typeof firstEntry.id);
+                console.log('Entry ID value:', firstEntry.id);
+                console.log('Current user ID:', user?.uid);
+                console.log('Entry userId:', firstEntry.userId);
+                console.log('User IDs match:', user?.uid === firstEntry.userId);
                 try {
                   await FuelService.deleteFuelEntry(firstEntry.id);
                   console.log('Test delete successful');
                   await loadEntries();
+                  Alert.alert('Success', 'Test delete completed!');
                 } catch (error) {
                   console.error('Test delete failed:', error);
+                  Alert.alert('Error', `Test delete failed: ${error.message}`);
                 }
+              } else {
+                Alert.alert('Info', 'No entries to delete');
               }
             }}
             className="mt-2 bg-red-500 px-3 py-1 rounded"
           >
             <Text className="text-white text-xs">Test Delete First Entry</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+            onPress={() => {
+              console.log('=== DEBUG INFO ===');
+              console.log('User authenticated:', !!user);
+              console.log('User ID:', user?.uid);
+              console.log('Entries loaded:', entries.length);
+              if (entries.length > 0) {
+                console.log('First entry:', entries[0]);
+                console.log('First entry ID:', entries[0].id);
+                console.log('First entry userId:', entries[0].userId);
+                console.log('User IDs match:', user?.uid === entries[0].userId);
+              }
+              console.log('==================');
+            }}
+            className="mt-2 bg-blue-500 px-3 py-1 rounded"
+          >
+            <Text className="text-white text-xs">Debug Info</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity
+            onPress={() => {
+              Alert.alert(
+                'Logout',
+                'Go to Profile tab to logout, or use the logout button there.',
+                [{ text: 'OK' }]
+              );
+            }}
+            className="mt-2 bg-orange-500 px-3 py-1 rounded"
+          >
+            <Text className="text-white text-xs">Logout Info</Text>
           </TouchableOpacity>
         </View>
       )}

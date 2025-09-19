@@ -13,10 +13,35 @@
 
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { useAuth } from '../../context/AuthContext';
 
 const HomeScreen = () => {
   const router = useRouter();
+  const { user, logout } = useAuth();
+  
+  const handleLogout = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await logout();
+              router.replace('/login');
+            } catch (error) {
+              console.error('Logout error:', error);
+              Alert.alert('Error', 'Failed to logout. Please try again.');
+            }
+          },
+        },
+      ]
+    );
+  };
   
   return (
     <View className="flex-1 bg-gray-50">
@@ -37,8 +62,18 @@ const HomeScreen = () => {
               <Text className="text-white text-3xl font-bold mt-1">FuelWise</Text>
               <Text className="text-blue-100 text-sm mt-1">Smart fuel tracking made simple</Text>
             </View>
-            <View className="bg-white/10 rounded-full px-4 py-2">
-              <Text className="text-white text-sm font-medium">🗓️ Today</Text>
+            <View className="flex-row space-x-2">
+              <View className="bg-white/10 rounded-full px-4 py-2">
+                <Text className="text-white text-sm font-medium">🗓️ Today</Text>
+              </View>
+              {__DEV__ && (
+                <TouchableOpacity
+                  onPress={handleLogout}
+                  className="bg-red-500/20 rounded-full px-4 py-2"
+                >
+                  <Text className="text-white text-sm font-medium">🚪 Logout</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
 
