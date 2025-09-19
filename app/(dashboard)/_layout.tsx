@@ -64,6 +64,15 @@ const DashBoardLayout = () => {
           }}
         />
         <Tabs.Screen
+          name="fuelwise"
+          options={{
+            title: "FuelWise",
+            tabBarIcon: (data) => (
+              <AntDesign name="car" size={24} color="black" />
+            ),
+          }}
+        />
+        <Tabs.Screen
           name="tasks"
           options={{
             title: "Tasks",

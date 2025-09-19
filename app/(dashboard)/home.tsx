@@ -11,10 +11,13 @@
 
 // export default HomeScreen
 
-import { View, Text, TouchableOpacity, ScrollView, StatusBar } from 'react-native'
-import React from 'react'
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 
 const HomeScreen = () => {
+  const router = useRouter();
+  
   return (
     <View className="flex-1 bg-gray-50">
       <StatusBar barStyle="light-content" backgroundColor="#1e40af" />
@@ -40,7 +43,10 @@ const HomeScreen = () => {
           </View>
 
           {/* Main CTA Button */}
-          <TouchableOpacity className="bg-white rounded-2xl px-6 py-5 shadow-xl">
+          <TouchableOpacity 
+            className="bg-white rounded-2xl px-6 py-5 shadow-xl"
+            onPress={() => router.push('/fuelwise')}
+          >
             <View className="flex-row items-center justify-center">
               <View className="w-12 h-12 bg-blue-100 rounded-full items-center justify-center mr-4">
                 <Text className="text-blue-600 text-2xl">⛽</Text>
@@ -108,7 +114,10 @@ const HomeScreen = () => {
         <View className="px-4 mb-8">
           <Text className="text-gray-800 text-xl font-bold mb-4">Quick Actions</Text>
           <View className="flex-row space-x-4">
-            <TouchableOpacity className="flex-1 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6">
+            <TouchableOpacity 
+              className="flex-1 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6"
+              onPress={() => router.push('/fuelwise')}
+            >
               <View className="items-center">
                 <View className="w-14 h-14 bg-white/20 rounded-full items-center justify-center mb-3">
                   <Text className="text-white text-2xl">📊</Text>
@@ -118,7 +127,10 @@ const HomeScreen = () => {
               </View>
             </TouchableOpacity>
             
-            <TouchableOpacity className="flex-1 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6">
+            <TouchableOpacity 
+              className="flex-1 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6"
+              onPress={() => router.push('/fuelwise')}
+            >
               <View className="items-center">
                 <View className="w-14 h-14 bg-white/20 rounded-full items-center justify-center mb-3">
                   <Text className="text-white text-2xl">📋</Text>
@@ -205,7 +217,7 @@ const HomeScreen = () => {
         <View className="px-4 mb-6">
           <View className="bg-white rounded-2xl p-4 shadow-sm border-2 border-dashed border-gray-200">
             <Text className="text-gray-600 text-center font-medium">
-              🚀 Ready to start tracking? Tap "Add Fuel Entry" above!
+              🚀 Ready to start tracking? Tap &quot;Add Fuel Entry&quot; above!
             </Text>
           </View>
         </View>

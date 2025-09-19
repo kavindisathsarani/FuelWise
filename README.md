@@ -1,50 +1,122 @@
-# Welcome to your Expo app 👋
+# FuelWise
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A simple and practical mobile application designed to help users keep track of their fuel usage and expenses. Built with React Native, Expo, Tailwind CSS, and Firebase.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **Fuel Entry Tracking**: Log every fuel refill with details such as:
+  - Fuel type (petrol or diesel)
+  - Date and time
+  - Quantity filled (in liters)
+  - Price per unit
+  - Total cost (automatically calculated)
+  - Optional odometer readings
+  - Location and notes
 
+- **Fuel History**: View all your fuel entries in an organized list with:
+  - Edit and delete functionality
+  - Search and filter capabilities
+  - Detailed entry information
+
+- **Statistics & Analytics**: Get helpful insights including:
+  - Total fuel consumed
+  - Total money spent
+  - Average fuel efficiency (km/liter)
+  - Fuel type breakdown
+  - Monthly and yearly summaries
+
+- **User-Friendly Interface**: Clean and intuitive design with:
+  - Modern UI using Tailwind CSS
+  - Responsive layout
+  - Easy navigation
+  - Real-time data updates
+
+## Tech Stack
+
+- **React Native** with Expo
+- **TypeScript** for type safety
+- **Tailwind CSS** for styling
+- **Firebase** for backend services:
+  - Firestore for data storage
+  - Authentication for user management
+- **Expo Router** for navigation
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn
+- Expo CLI
+- iOS Simulator or Android Emulator (optional)
+- Expo Go app on your mobile device
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone <repository-url>
+   cd fuelwise
+   ```
+
+2. Install dependencies
    ```bash
    npm install
    ```
 
-2. Start the app
+3. Configure Firebase
+   - Create a new Firebase project
+   - Enable Firestore and Authentication
+   - Update the Firebase configuration in `firebase.ts`
 
+4. Start the development server
    ```bash
-   npx expo start
+   npm start
    ```
 
-In the output, you'll find options to open the app in a
+5. Run the app
+   - Press `i` for iOS simulator
+   - Press `a` for Android emulator
+   - Scan the QR code with Expo Go app on your phone
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+fuelwise/
+├── app/                    # App screens and navigation
+│   ├── (auth)/            # Authentication screens
+│   ├── (dashboard)/       # Main app screens
+│   └── _layout.tsx        # Root layout
+├── components/            # Reusable components
+│   ├── FuelEntryForm.tsx  # Fuel entry form
+│   ├── FuelHistoryList.tsx # Fuel history display
+│   └── FuelStatistics.tsx # Statistics and analytics
+├── context/               # React contexts
+├── services/              # API and Firebase services
+├── types/                 # TypeScript type definitions
+└── assets/               # Images and fonts
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Usage
 
-## Learn more
+1. **Sign Up/Login**: Create an account or login to access the app
+2. **Add Fuel Entry**: Tap the "+" button to add a new fuel entry
+3. **View History**: Browse through all your fuel entries
+4. **Check Statistics**: View detailed analytics and insights
+5. **Edit/Delete**: Modify or remove existing entries as needed
 
-To learn more about developing your project with Expo, look at the following resources:
+## Contributing
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
-## Join the community
+## License
 
-Join our community of developers creating universal apps.
+This project is licensed under the MIT License.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Support
+
+For support or questions, please open an issue in the repository.
