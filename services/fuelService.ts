@@ -161,9 +161,9 @@ export class FuelService {
     } catch (error) {
       console.error('=== DELETE ATTEMPT FAILED ===');
       console.error('Error deleting fuel entry:', error);
-      console.error('Error code:', error.code);
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
+      console.error('Error code:',  (error as any).code);
+      console.error('Error message:',  (error as any).message);
+      console.error('Error stack:',  (error as any).stack);
       console.error('Full error object:', JSON.stringify(error, null, 2));
       throw error;
     }
