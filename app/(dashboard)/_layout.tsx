@@ -45,7 +45,7 @@ const DashBoardLayout = () => {
             ),
           }}
         />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="profile"
           options={{
             title: "Profile",
@@ -53,8 +53,8 @@ const DashBoardLayout = () => {
               <AntDesign name="profile" size={24} color="black" />
             ),
           }}
-        />
-        <Tabs.Screen
+        /> */}
+        {/* <Tabs.Screen
           name="setting"
           options={{
             title: "Settings",
@@ -62,7 +62,7 @@ const DashBoardLayout = () => {
               <AntDesign name="setting" size={24} color="black" />
             ),
           }}
-        />
+        /> */}
         <Tabs.Screen
           name="fuelwise"
           options={{
@@ -72,7 +72,25 @@ const DashBoardLayout = () => {
             ),
           }}
         />
-        <Tabs.Screen
+         <Tabs.Screen
+          name="profile"
+          options={{
+            title: "Profile",
+            tabBarIcon: (data) => (
+              <AntDesign name="profile" size={24} color="black" />
+            ),
+          }}
+        />
+         <Tabs.Screen
+          name="setting"
+          options={{
+            title: "Settings",
+            tabBarIcon: (data) => (
+              <AntDesign name="setting" size={24} color="black" />
+            ),
+          }}
+        />
+        {/* <Tabs.Screen
           name="tasks"
           options={{
             title: "Tasks",
@@ -80,7 +98,7 @@ const DashBoardLayout = () => {
               <FontAwesome5 name="tasks" size={24} color="black" />
             ),
           }}
-        />
+        /> */}
       </Tabs>
     </SafeAreaView>
   );
