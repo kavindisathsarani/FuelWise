@@ -112,7 +112,7 @@ export default function FuelHistoryList({ onRefresh }: FuelHistoryListProps) {
               } catch (error) {
                 console.error('Error deleting fuel entry:', error);
                 console.error('Error details:', error);
-                Alert.alert('Error', `Failed to delete fuel entry: ${error.message || 'Unknown error'}`);
+                Alert.alert('Error', `Failed to delete fuel entry: ${(error as Error).message || 'Unknown error'}`);
               }
             },
           },
@@ -234,7 +234,7 @@ export default function FuelHistoryList({ onRefresh }: FuelHistoryListProps) {
                   Alert.alert('Success', 'Test delete completed!');
                 } catch (error) {
                   console.error('Test delete failed:', error);
-                  Alert.alert('Error', `Test delete failed: ${error.message}`);
+                  Alert.alert('Error', `Test delete failed: ${(error as Error).message}`);
                 }
               } else {
                 Alert.alert('Info', 'No entries to delete');
