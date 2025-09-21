@@ -105,13 +105,11 @@ fuelwise/
 4. **Check Statistics**: View detailed analytics and insights
 5. **Edit/Delete**: Modify or remove existing entries as needed
 
-## Contributing
+## 📺 Demo Video
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+Check out the FuelWise app in action on YouTube:
+
+[Watch the Demo](https://youtu.be/n5RnXNIr-hA?si=vord80adkPKwgUN_)
 
 ## License
 
