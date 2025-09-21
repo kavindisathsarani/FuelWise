@@ -111,6 +111,11 @@ Check out the FuelWise app in action on YouTube:
 
 [Watch the Demo](https://youtu.be/n5RnXNIr-hA?si=vord80adkPKwgUN_)
 
+## Download
+
+📦 **Download APK:** [Google Drive Link](https://drive.google.com/file/d/1z61ycfeMNFJO26yv8YsTfl_0YZRhwyIA/view?usp=sharing)
+
+
 ## License
 
 This project is licensed under the MIT License.
